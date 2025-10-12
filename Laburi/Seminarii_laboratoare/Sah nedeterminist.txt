@@ -1,0 +1,30 @@
+sah nedeterminist()
+{
+	while (f (tabla) == 2)
+	{
+		miscare = find_best_move(tabla, David)
+		update(tabla,miscare)
+		if f (tabla) == 0 || f (tabla) == 1
+			break
+		miscare_adversar = mutare_adversar() // adversarul muta determinist
+		update(tabla, miscare_adversar)
+	}
+}
+
+find_best_move(tabla, player) // intoarce o mutare daca nu se poate pierde cu ea
+{
+	moves = compute_moves(tabla)
+	while f(tabla) == 2
+		move = choice(moves)
+		update(tabla, miscare)
+		if f(tabla) == 1 && player == David || f(tabla) == -1 && player == Adversar:
+			return move
+		if f(tabla) == 0:
+			fail() // nu vrem remiza
+		// miscarea nu castiga direct, vedem ce face jucatorul adversar
+		
+		if find_best_move(tabla, Adversar(player) ) != fail: // adversarul poate castiga cu mutarea facuta de player
+			fail()
+		else:
+			return move // miscarea nu este una care poate pierde - orice ar muta adversarul find_best_move da fail pentru adversar	
+}
