@@ -1,0 +1,216 @@
+f_finite(M*) = T daca M* se opreste pentru un numar finit de cuvinte
+nedecidabila
+
+f_h ------> F_finite
+M, w --T-> M*
+
+M* se opreste numai pentru w
+
+M*(x):
+     if(x == w)
+        run M(w)
+     else loop
+     return 1
+
+"=>" f_h(M, w) = 1 => M(w) se opreste => M*(w) se opreste si este singurul input pentru care M* se opreste
+=> M* se  opreste pentru un numar finit de cuvinte => f_finite(M*) = 1
+
+"<=" f_finite(M*) = 1 =>  M* se opreste pentru un numar finit de cuvinte => Inseamna ca s-a ajuns pe un caz la return 1 => 
+M(w) se opreste => f_h(M, w) = 1
+
+=> f_h <=M f_finite
+f_h nedecidabila
+=> f_finite nedecidabila
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+f_p(M) = T daca orice w, M decide dacă w e palindrom
+f_eq(M1, M2) = T daca orice w, M1(w) = M2(w)
+
+f_p <=M f_eq
+M   --T--> M1, M2
+
+M1(x): transition to Y / return 1
+M2(x):
+    return run(M(x)) == isPalindrome(x)
+
+"=>" f_p(M) = 1 => orice w, M decide daca w e palindrom => M(x) mereu spune corect ca x e palindrom => == isPalindrome(x)  o sa fie mereu adevarata => M2(x) meereu da 1
+=> M1 = M2 pentru orice input => f_eq(M1, M2) = 1
+"<=" f_eq(M1, M2) = 1 => M2 mereu intoarce 1 => run(M(x)) sigur se termina, si da acelasi rezultat ca isPalindrome(x) => 
+M(x) decide daca x este palindrom pentru orice input x => f_p(M) = 1
+
+----------------------------------------------------------------------------------------------------------------------------
+ 
+kvc <=p set-cover
+G=(E, V), k ------T----> U, S, K
+
+set-cover -> exista o colectie de k submultimi din S a caror reuniune este U
+
+
+4 7 23 44 111 83
+s = {4, 23, 44}, {4, 111, 83}, {7, 44, 11}, {4 ,44, 83}
+k = 3
+
+
+
+k = k
+U = E
+S = {{e1, e6}, {e1, e2, e4, e5}, {e2, e3}} 
+<- muchiile adiacente cu fiecare nod din acoperiea grafului
+
+"=>" kvc(G, k) = 1 => avem o acoperire de k noduri a grafului G 
+=> k multimi in S => alegand toate k multimi din S si reunindu-le, 
+obtinem multimea de muchii E => set cover(U, S, k) = 1 
+"<=" set cover(U, S, k) = 1 => putem sa alegem k elemente din S, a.i
+reuniunea lor sa dea U => Din constructia lui S, stiim ca fiecare
+multime din S e asociata unui nod din graful G, avand toate muchiile
+adiacente lui => S este de marime k din constructie
+=> Fiecare multime din S contine muchiile acoperite de un nod din
+acoperirea grafului G => kvc(G, k) = 1
+
+
+----------------------------------------------------------------------
+
+
+int sum = 0
+for i = n; i > 0; i --                                     
+    for j = 1; j < n; j *= 3                               
+        for k = 0; k < j; k++                                
+            sum +=k
+
+
+i = n => log_3(n) valori ale lui j, pentru fiecare j se fac j operatii de sum+=k
+
+j 1 3 9 ... 3^i 
+3^i <= n
+1 + 3 + 3^2 + 3^3 + ... + 
+
+sum(i=0, log_3(n))(3^i) = 3^(log_3n + 1) / 2
+
+n *  3^(logn + 1) / 2
+
+O(n * 3^log_3n) = O(n * n^log_3(3)) = O(n^2)
+
+-------------------------------------------------------------------------------
+
+BTree --> TDA
+
+Empty : -> Btree
+Node : Int x BTree x Btree -> BTree
+
+operatorul insert care primeste un intreg si un arbore echilibrat
+si introduce un nou nod, tinand arborele echilibrat
+
+Arbore sa fie echilibrat:
+adancime(s) = adancime(d)
+adancime(s) - 1 = adancime(d)
+
+depth : Btree -> Int
+depth(Empty) = 0
+depth(Node(v, s, d)) = max(depth(s), depth(d)) + 1
+
+insert : Intreg x BTree -> BTree
+insert(v, Empty) = Node(v, Empty, Empty)
+insert(v, Node(e, s, d)) = 
+    if depth(s) - 1 == depth(d):
+        Node(e, s, insert(v, d))
+    else: 
+        Node(e, insert(v, s), d)
+
+
+--------------------------------------------------------------------------
+
+-> arbore => complexitate theta(.....)
+-> substitutie cu theta(.....)
+
+---------------------------------------------------------------------------
+
+SetCover(U, S):
+
+    // generare de solutii  - angelic: O(lenght(s))
+    chosen = []                             O(1)
+    for m in S:                             O(lenght(S))
+        rez = choice (1, 0)                 O(1)
+        if( rez == 1 )                      O(1)
+            chosen += m                     O(1)
+
+// real: O(2^lenght(S))
+
+    // certificat polinomial
+    if lenght(chosen) > k:          O(1)
+        fail
+    if reuniune(chosen) == U:       O(lenght(U))
+        succes
+    fail
+
+    -----------------------------------------------------------------------
+angelic: O(lenght(s) + lenghT(u))
+real: O(2^lenght(S) * lenghT(u))
+
+-----------------------------------------------------------------------------
+
+
+Numere naturale
+
+Int NUUU
+
+Zero : -> Nat
+Succ : Nat -> Nat
+
+3 = Succ(Succ(Succ(Zero)))
+
+add : Nat x Nat -> Nat
+add(Zero, x) = x
+add(Succ(y), x) = Succ(add(y, x))
+
+
+-------------------------------
+
+Numere Intregi
+
+Zero : -> Intreg
+Succ : Intreg -> Intreg
+Dec : Intreg -> Intreg
+
+add : Intreg x Intreg -> Intreg
+add(Zero, x) = x
+add(Succ(y), x) = simplify(Succ(add(y, x)))
+add(Dec(y), x) = simplify(Dec(add(y, x)))
+
+simplify : Intreg -> Intreg
+simplify Succ(Dec(x)) = x
+simplify Dec(Suc(x)) = x
+simplify x = x // daca x != Succ(Dec(...)) si x != Dec(Suc(...))
+
+Succ(Dec(Zero)) = Zero
+
+--------------------------------------------------------------------
+
+Stack TDA
+
+EmptyS :-> Stack
+push : Int x Stack -> Stack
+
+pop : Stack -> Stack
+pop (EmptyS) = EmptyS
+pop (push(v, s)) = s
+
+peek : Stack \ EmptyS -> Int
+peek (push(v, s)) = v
+
+-------------------------------------------------------------------------
+
+Queue
+
+EmptyQ :-> Queue
+Enqueue : Int x Queue -> Queue
+
+dequeue : Queue\EmptyQ -> Queue
+dequeue (Enqueue(e, EmptyQ)) = EmptyQ
+dequeue (Enqueue(e, q)) = Enqueue(e, dequeue(q))
+    // q nu este de forma EmptyQ
+
+peek : Queue\EmptyQ -> Int
+peek (Enqueue(e, EmptyQ)) = e
+peek (Enqueue(e, q)) = peek(q)
+

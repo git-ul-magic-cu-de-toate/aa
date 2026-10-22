@@ -1,0 +1,39 @@
+name: ex1
+init: q0
+accept: q_accept
+
+q0, 0
+q_parcurgere0, 0, >
+
+q0, 1
+q_parcurgere1, 1, >
+
+q_parcurgere0, 0
+q_parcurgere0, 0, >
+
+q_parcurgere0, 1
+q_parcurgere0, 1, >
+
+q_parcurgere0, _
+q_check1, _, <
+
+q_check1, 0
+N, 0, -
+
+q_check1, 1
+Y, 1, -
+
+q_parcurgere1, 0
+q_parcurgere1, 0, >
+
+q_parcurgere1, 1
+q_parcurgere1, 1, >
+
+q_parcurgere1, _
+q_check0, _, <
+
+q_check0, 0
+Y, 0, -
+
+q_check, 1
+N, 1, -

@@ -1,0 +1,166 @@
+VARIANTA 1
+
+1.
+q1      f1, X, >    f0, X, >  Y, _, -    q1, X, >
+f0      r, X, <     f0, 1, >  e, _, <    f0, X, >
+f1      f1, 0, >    r, X, <   e, _, <    f1, X, >
+r       r, 0, <     1, r, <   q1, _, >   q1, _, >
+e       o, 0, <     o, 1, <   Y, _, -    e, X, <
+o       e, 0, <     e, 1, <   N, _, -    o, X, <
+
+2.
+('', '101', 'start')
+('X', '01', 'find1')
+('X0', '1', 'find1')
+('X', '0X', 'reset')
+('', 'X0X', 'reset')
+('', '□X0X', 'reset')
+('□', 'X0X', 'start')
+('□X', '0X', 'start')
+('□XX', 'X', 'find0')
+('□XXX', '', 'find0')
+('□XXX', '□', 'N')
+
+3.
+HALT < e
+t((M, w)) = M'
+
+M'[v]:
+    if |v| are lungime pară:
+        simulate M[w]
+    else
+        loop
+
+HALT((M, w)) = T => e(t((M, w))) = T: M[w] halts => M'[v] halts pe then mereu
+ȘI mereu ciclează pe else => M'[v] se oprește exact pt |v| par => e(enc(M')) =
+T
+
+e(t(M, w)) = T => HALT(M, w) = T: M'[v] halts exact pt cuvinte de lungime
+pară => M'[v] halts pe then => M[w] halts => HALT(M, w) = T
+
+4.
+T(n) <= 2T(n/2) + nlog(n)
+          TM => Theta(n log(n))
+
+T(n) >= 2T(n/3) + nlog(n)
+          TM => Theta(n log(n))
+
+T(n) in Theta(n log(n))
+
+5.
+oricare c, există n0, oricare n > n0, 0 <= f(n) <= c*n log(n)
+există c1, c2, există n0', oricare n > n0', c1*log(n) <= g(n) <= c2*log(n)
+
+f(n)/g(n) <= c1*n^2 / g(n)
+  => f/g <= c*n log(n) /  c1*log(n) = (c/c1) * (n log(n) / log(n))
+  o(n)
+
+6.
+i = 0: for-ul innermost se execută de: 0 + 1 + 2 + ... + n - 1 ori => (n-1) * n / 2
+i = 1: for-ul innermost se execută de: 0 + 0 + 1 + .... + n -2 ori => (n-2) * (n-1) / 2
+...
+i = n - 1: for-ul innermost se execută de 0 ori
+
+1/2 * ((n-1)n + (n-2)(n-1) + (n-3)(n-2) + ... (n - (n - 1))(n - n)) =
+1/2 * (n^2 - n + n^2 - 3n + 2 + n^2 - 5n + 6 + ... n ^ 2 - n(n-1) - n^2 + n(n-1)) ~ n^3
+
+7.
+Din "oricare h din P, h < f", nu putem spune despre f decât că nu e o problemă
+trivială.
+Faptul că f se reduce la g înseamnă că g e o problemă  non-trivială.
+
+8
+evenPos(Empty) = Empty
+evenPos(Cons(x, Empty)) = Cons(x, Empty)
+evenPos(Cons(x, Cons(y, ys))) = Cons(x, evenPos(ys))
+
+9.
+CB: mirror(mirror(Nil)) =(M1) = mirror(Nil) =(M1) = Nil
+Assume: mirror(mirror(l)) = l AND mirror(mirror(r)) = r
+PI: mirror(mirror(Node(x, l, r)) = Node(x, l, r)
+       =(M2) mirror(Node(x, mirror(r), mirror(l)))
+       =(M2) Node(x, mirror(mirror(l)), mirror(mirror(r))
+       =(IH) Node(x, l, r)
+
+VARIANTA 2
+
+1.
+q1    f0, 0, >    f1, 1, >      N, _, -
+f0    f0, 0, >    f01, 1, >     N, _, -
+f1    f10, 0, >   f1, 1, >      N, _, -
+f10   f10, 0, >   f101, 1, >    N, _, -
+f101  f101, 0, >  f101, 1, >    Y, _, -
+f01   f101,0, >   f01, 1, >     N, _, -
+
+2.
+('', '010', 'start')
+('□', '10', 'remember0')
+('□1', '0', 'remember0')
+('□10', '', 'remember0')
+('□1', '0□', 'expect0')
+('□', '1□□', 'reset')
+('', '□1□□', 'reset')
+('□', '1□□', 'start')
+('□□', '□□', 'remember1')
+('□', '□□□', 'expect1')
+('□', '□□□', 'Y')
+
+3.
+HALT < f
+t((M, w)) = M1, M2
+
+M1[v]:
+   run M[w]
+
+M2[v]:
+    halts
+
+HALT((M, w)) = T => e(t((M, w))) = T: M[w] halts => M1 halts pe orice input,
+inclusiv enc(M2) => M1[enc(M2)] equiv M2[enc(M1)] => f(M1, M2) = T
+
+f(M1, M2) = T => M1[enc(M2)] equiv M2[enc(M1)] => M1 halts pe orice input,
+inclusiv enc(M2) => M[w] halts => HALT(M, w) = T
+
+
+4.
+k = log(n), n = 2^k
+T(2^k) = 2T(2^(k/2)) + k
+S(k) = T(2^k)
+S(k) = 2S(k/2) + k
+TM => Theta(k * log(k))
+subsutituind => Theta(log(n)*log(log(n)))
+
+5.
+exists c, exists n0, forall n > n0, 0 <= f(n) <= c*log(n)
+exists c', exists n0', forall n > n0, 0 <= c' * n^2 <= g(n)
+
+f(n)/g(n) <= c*log(n) / g(n) <= c*log(n) / c'*n^2 = (c/c') log(n)/n^2
+
+6.
+T(n) = 2T(n/2) + 1
+TM => Theta(log(n))
+
+7.
+Din primele două, știm că f și g sunt NPC; dacă g se reduce la f, f e NPH;
+dacă  h se reduce la f, h e în NP, deci NPC
+
+8.
+sum(Nil) = 0
+sum(Node(x, l, r)) = x + sum(l) + sum(r)
+
+sumChildren(Nil) = Nil
+sumChildren(Node(x, Empty, Empty) = Node(x, Empty, Empty)
+sumChildren(Node(x, l, r)) = Node(x + sum(sumChildren(l)) + sum(sumChildren(r))), sumChildren(l), sumChildren(r))
+
+9.
+CB: height(Nil) = (H1) 0
+    height(mirror(Nil)) =(M1) = height(Nil) =(H1) = 0
+
+Assume: height(l) = height(mirror(l)) AND height(r) = height(mirror(r))
+PI: height(Node(x, l, r)) = height(mirror(Node(x, l, r))
+     lhs = (H2) 1 + max(height(l), height(r))
+
+     rhs = (M2) height(Node(x, mirror(r), mirror(l)))
+         = (H2) 1 + max(height(mirror(r)), height(mirror(l)))
+         = (IH) 1 + max(height(r), height(l))
+         din comutativitate max, reiese lhs = rhs

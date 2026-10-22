@@ -1,0 +1,60 @@
+name: ex2
+init: q0
+accept: q_accept
+
+q_sterge_prima_litera, 0
+q_parcurgere, _, >
+
+q_sterge_prima_litera, 1
+q_parcurgere, _, >
+
+q_parcurgere, 0
+q_parcurgere, 0, >
+
+q_parcurgere, 1
+q_parcurgere, 1, >
+
+q_parcurgere, _
+q_sterge_ultima_litera, _, <
+
+q_sterge_ultima_litera, 0
+q_parcurgere_invers, _, <
+
+q_sterge_ultima_litera, 1
+q_parcurgere_invers, _, <
+
+q_parcurgere_invers, 0
+q_parcurgere_invers, 0, <
+
+q_parcurgere_invers, 1
+q_parcurgere_invers, 1, <
+
+q_parcurgere_invers, _
+q0, _, >
+
+q0, 0
+q0_0, 0, >
+
+q0, 1
+q0_1, 1, >
+
+q0_0, 0
+q_sterge_prima_litera, 0, <
+
+q0_0, 1
+q_sterge_prima_litera, 1, <
+
+q0_1, 0
+q_sterge_prima_litera, 0, <
+
+q0_1, 1
+q_sterge_prima_litera, 1, <
+
+q0_0, _
+q_accept, _, <
+
+q0_1, _
+q_reject, _, <
+
+q0, _
+q_reject, _, -

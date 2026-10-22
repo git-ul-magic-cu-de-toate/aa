@@ -1,0 +1,16 @@
+def TSP(V, A):
+    V_aux = []
+    for i in range(n):
+        u = choice(V)
+        if u not in V_aux:
+            V_aux.append(u)
+        else:
+            fail()
+    
+    V_aux.append(V_aux[0])
+    for i in range(n):
+        if A[V_aux[i]][V_aux[i + 1]] == 0:
+            fail()
+    success()
+
+Complexitatea algoritmului->O(n)

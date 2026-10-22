@@ -1,0 +1,163 @@
+3. Vertex cover → set cover
+Sa se reduca problema vertex cover la problema set cover.
+Set cover: Dandu-se o multime de S elemente si N submultimi S1,S2,… Sn, se pot gasi k submultimi a.i. reuniunea lor sa dea multimea S?
+Sa se scrie functia de reducere in C++ si rezolvarea pentru problema set cover in C++, a.i. sa se poata rezolva problema vertex cover pe baza acestei functii de reducere si pe baza rezolvarii problemei set cover.
+
+Rezolvarea algoritmului s-a facut in Python intrucat implementarea a fost mai facila.
+
+K_ACOPERIRE =<p SET COVER
+ 
+K_acoperire : Fie  G=(V,E) un graf neorientat. Multimea V'⊂V se numeste K_acoperire a lui G daca:
+-> card(V')=k
+-> oricare (u,v)∈E avem u∈V' &| v∈V'
+
+            multime
+              |
+G=(V,E)------>S,(Si)i,h
+   |  \            \
+   |   \            \
+   |    multime      submultimi pentru S
+   |      arce
+   |
+multime
+   noduri
+
+
+a)ALGORITMUL DETERMINIST TRACTABIL
+
+- se pleaca de la un graf G si un numar k, graficul G avand o k_acoperire 
+- se considera S=E (multimea muchiilor)
+- se formeaza Si subseturi unde i=1,n (n-numarul de noduri)
+- se constata ca h=k 
+
+- ALG_Set_Cover(G,k)   //G=(V,E) -> n=card(V) & m=card(E)
+	S = E //multime de arce
+	h = k //multimea de Si care alcatuiesc S-ul
+	for_each vi∈V //i=1,n
+		for_each ej∈E //j=1,m
+			if vi este capat al lui ej
+				Si = ej //se adauga in submultimea coresunzatoare fiecarui	
+					//nod muchiile ce pleaca din nodul respectiv
+	return S,(Si)i,h
+
+
+b)ECHIVALENTA IESIRILOR
+
+- demonstrez ca G are o k_acoperire <=> S are o subcolectie cu cardinalul h
+
+"=>" Fie V'⊂V se numeste K_acoperire a lui G ; V'={vi1, vi2, vi3, ..., vik}
+		-> card(V')=k
+		-> oricare (u,v)∈E avem u∈V' &| v∈V'
+
+     Fie S'={xi1, xi2, xi3, ..., xik} U {yj / ej are un singur capat in V'} ; S'=⊂S
+- avem k valori de x in S'
+- daca ej are ambele capete in V' => yj!∈S'; xa,xb∈S' => ej=(va,vb) => ej este a j-a muchie din submultimea Si
+- daca ej are un singur capat in V'; fie va un capat => yj∈S'; xa∈S' => ultima muchie din multimea Si este a j-a muchie
+
+
+"<=" Fie S'⊂S a.i. card S'=k, k=h, ultima muchie din S' este a k-a la numar, S'={xi1, xi2, xi3, ..., xik} U {yj1, yj2, yj3, ..., yjk}  <=>  h=k
+
+- aratam ca V'={vi1, vi2, vi3, ..., vik}⊂V este k_acoperire a lui G
+- 0<j<m-1 : consideram arcul ej                                                            
+- yj∈S' => un singur x este in S':fie xa acel x => nodul este in V' si este singurul capat al lui ej in V'
+- yj!∈S' => exista 2 valori de x in S, xa, xb => va, vb∈V' => ej are ambele capete in V'
+===> V' este o k_acoperire a lui G
+
+Am aratat ca:
+(S,(Si)i,h) se poate obtine din (G,k) folosind un algoritm determinist tractabil si ca G are o k_acoperire <=> S are o subcolectie Si cu k elemente => k_acoperire =<p Set_cover 
+
+Codul scris in fisierul reducere.py
+\ \
+ \ \
+  v v
+#n-numar noduri
+#k-acoperirea pe care vrem sa o aflam
+#nod 1 -> variabile: 1, 2, 3, ..., k
+#nod 2 -> variabile: k+1, k+2, k+3, ..., 2^k
+#...
+#nod n -> variabile: (n-1)*k + 1, (n-1)*k + 2,(n-1)*k + 3, ..., n*k
+
+#output : (u * k + 1) V (v * k + 1) V (u * k + 2) V (v * k + 2) V … V (u * k + k) V (v * k + k)
+#(1 V (k + 1) V (2 * k + 1) V … V (n-1)k + 1) ^ (1V(k + 1)) ^ (1V(2k + 1)) ^ … ^ (((n-2)k + 1) V ((n-1)* + 1))
+
+
+def creare_mat(graph, muchie):               #O(n)
+    for i in range(muchie):
+        arc = input().split(" ")
+        linie = int(arc[0])
+        coloana = int(arc[1])
+        mat[linie - 1][coloana - 1] , mat[coloana - 1][linie - 1] = 1, 1
+    
+def creare_var(n, k):                        #O(k*n)
+    aux = []
+    for i in range(n * k):
+        aux.append(i + 1)
+    return aux
+
+#testare apartenenta fiecarei muchii din cadrul grafului la un set ales ca
+#si posibila acoperire
+
+def test1(var, k):              # un singur nod care sa apartina unei acoperiri  -> O(n*n*k)
+    length = len(var)           #lenght=n*k
+    aux = []
+    for i in range(k):          #face un pas de k 
+        aux1 = []
+        for j in range(i, length, k):
+            aux1.append(str(var[j]))
+        aux1 = " V ".join(aux1)
+        aux1 = "( " + aux1 + " )"
+        aux.append(aux1)
+        for j in range(i, length, k):
+            for p in range(j + k, length, k):
+                aux1 = "( " + str(j + 1) + " V " + str(p + 1) + " )"
+                aux.append(aux1)
+    return aux
+
+def test2(graph, k):            # k noduri care sa apartina unei acoperiri  -> O(n*n*k)
+    aux = []
+    nr_nod = len(graph)
+    for i in range(nr_nod):
+        for j in range(i + 1, nr_nod):
+            aux1 = []
+            if mat[i][j] == 1:
+                for p in range(0, k):
+                    aux1.append(str((i + 1) * k - p))
+                    aux1.append(str((j + 1) * k - p))
+                aux.append("( " + " V ".join(aux1) + " )")
+    return aux
+
+if __name__ == "__main__":                    #O(n)
+    k = int(input())
+    nr_nod = int(input())
+    muchie = int(input())
+    mat = [([0] * nr_nod) for i in range(nr_nod)]
+    
+    creare_mat(mat, muchie)
+    
+    var = creare_var(nr_nod, k)
+    SAT_1 = test1(var, k)
+    SAT_1 = "^".join(SAT_1)
+    SAT_2 = test2(mat, k)
+    SAT_2 = "^".join(SAT_2)
+    
+    SAT = SAT_1 + "^" +  SAT_2     # concatenarea solutiilor obtinute
+    
+    print(SAT)
+
+
+#Complexitate:
+    #worst_case ---->> k == n
+    #O(n) + O(n^2) + O(n^3) + O(n^3) + O(n) = O(n^3)
+
+
+
+
+
+
+
+
+
+
+
+
+
